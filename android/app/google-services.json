@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "223343608613",
+    "project_id": "lakuin-aja",
+    "storage_bucket": "lakuin-aja.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223343608613:android:c2244eb703a8e56c87d0cc",
+        "android_client_info": {
+          "package_name": "com.example.lakuin_aja"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "223343608613-nvd8t935j08dqmint4acqbe1t3547tsf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDn5eG_P_O_ZI7DyfWsyaikItg6x5Di3u0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "223343608613-nvd8t935j08dqmint4acqbe1t3547tsf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../data/constant_data.dart';
+import '../providers/google_sign_in_provider.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -9,10 +11,7 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Sign In"),
-      ),
+      backgroundColor: Colors.grey.shade900,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(30.0),
@@ -37,12 +36,12 @@ class SignInScreen extends StatelessWidget {
                         horizontal: 10.0, vertical: 5.0),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade400,
-                      borderRadius: BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(2.0),
                     ),
                     child: const Text(
                       kAppTitle,
                       style: TextStyle(
-                        fontSize: 40.0,
+                        fontSize: 30.0,
                         letterSpacing: 1.3,
                         color: Colors.white,
                       ),
@@ -53,24 +52,32 @@ class SignInScreen extends StatelessWidget {
               const SizedBox(
                 height: 10.0,
               ),
-              Text(
+              const Text(
                 "Sebuah aplikasi untuk menulis target-target harian.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.grey.shade700,
+                  color: Colors.white70,
                   letterSpacing: 1.2,
                   fontSize: 16.0,
                 ),
               ),
               const SizedBox(
-                height: 35.0,
+                height: 50.0,
               ),
               SizedBox(
                 width: double.infinity,
                 height: 50.0,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const FaIcon(FontAwesomeIcons.google),
+                  onPressed: () {
+                    final googleSignInProvider =
+                        Provider.of<GoogleSignInProvider>(context,
+                            listen: false);
+
+                    googleSignInProvider.googleLogin();
+                  },
+                  icon: const FaIcon(
+                    FontAwesomeIcons.google,
+                  ),
                   label: const Text("Sign In with Google"),
                 ),
               )

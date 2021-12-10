@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import "package:firebase_core/firebase_core.dart";
 
 import '../data/constant_data.dart';
-import '../screens/home_screen.dart';
+import '../screens/sign_in_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: kAppTitle,
-      home: HomeScreen(),
+      home: SignInScreen(),
     );
   }
 }

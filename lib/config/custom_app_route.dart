@@ -5,6 +5,7 @@ class CustomAppRoute {
 
   static const String homeScreen = "/";
   static const String errorScreen = "/error";
+  static const String goalsScreen = "/goals";
   static const String signInScreen = "/signIn";
   static const String targetScreen = "/target";
 

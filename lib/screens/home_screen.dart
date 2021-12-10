@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lakuin_aja/screens/target_screen.dart';
 
+import '../screens/target_screen.dart';
 import '../screens/error_screen.dart';
 import '../screens/sign_in_screen.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../screens/home_screen.dart';
+import '../screens/goals_screen.dart';
 import '../screens/error_screen.dart';
 import '../screens/target_screen.dart';
 import '../screens/sign_in_screen.dart';
@@ -18,6 +19,9 @@ class AppRouter {
       case CustomAppRoute.targetScreen:
         return CustomAppRoute.goToRoute(
             const TargetScreen(), CustomAppRoute.targetScreen);
+      case CustomAppRoute.goalsScreen:
+        return CustomAppRoute.goToRoute(
+            const GoalsScreen(), CustomAppRoute.goalsScreen);
       default:
         return CustomAppRoute.goToRoute(
             const ErrorScreen(), CustomAppRoute.errorScreen);

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import "package:firebase_core/firebase_core.dart";
 
+import '../config/app_router.dart';
 import '../data/constant_data.dart';
-import '../screens/home_screen.dart';
+import '../config/custom_app_route.dart';
 import '../providers/google_sign_in_provider.dart';
 
 void main() async {
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: kAppTitle,
-        home: HomeScreen(),
+        onGenerateRoute: AppRouter.onGenerateRoute,
+        initialRoute: CustomAppRoute.homeScreen,
       ),
     );
   }

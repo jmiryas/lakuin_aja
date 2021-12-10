@@ -16,22 +16,6 @@ class TargetScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Target"),
         centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () {
-              final googleSignInProvider =
-                  Provider.of<GoogleSignInProvider>(context, listen: false);
-
-              googleSignInProvider.googleLogout();
-            },
-            child: const Text(
-              "Logout",
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
       ),
       drawer: const DrawerNavigationWidget(),
       body: Padding(

@@ -68,12 +68,12 @@ class SignInScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 50.0,
                 child: ElevatedButton.icon(
-                  onPressed: () {
+                  onPressed: () async {
                     final googleSignInProvider =
                         Provider.of<GoogleSignInProvider>(context,
                             listen: false);
 
-                    googleSignInProvider.googleLogin();
+                    await googleSignInProvider.googleLogin();
                   },
                   icon: const FaIcon(
                     FontAwesomeIcons.google,

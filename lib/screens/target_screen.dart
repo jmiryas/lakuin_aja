@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lakuin_aja/widgets/drawer_navigation_widget.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../providers/google_sign_in_provider.dart';
+import '../widgets/drawer_navigation_widget.dart';
 
 class TargetScreen extends StatelessWidget {
   const TargetScreen({Key? key}) : super(key: key);

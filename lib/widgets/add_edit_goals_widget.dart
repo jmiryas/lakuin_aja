@@ -56,6 +56,8 @@ class AddEditGoalsWidget extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
+            // * Goals tidak boleh kosong.
+
             if (goalsController.text.isEmpty) {
               return showDialog(
                 context: context,
@@ -76,6 +78,8 @@ class AddEditGoalsWidget extends StatelessWidget {
                 ),
               );
             } else {
+              // * Tambah goals.
+
               if (goalsType == GoalsType.add) {
                 const uuid = Uuid();
 
@@ -99,7 +103,9 @@ class AddEditGoalsWidget extends StatelessWidget {
                     content: Text("Goals berhasil dibuat!"),
                   ),
                 );
-              } else {
+              } else if (goalsType == GoalsType.edit) {
+                // * Edit goals.
+
                 FirebaseFirestore firestore = FirebaseFirestore.instance;
                 CollectionReference goalsCollection =
                     firestore.collection(kGoalsCollection);

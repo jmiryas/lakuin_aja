@@ -1,11 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lakuin_aja/enum/goals_enum.dart';
-import 'package:lakuin_aja/models/goals_model.dart';
 
+import '../enum/goals_enum.dart';
 import '../data/constant_data.dart';
+import '../models/goals_model.dart';
 import '../widgets/add_edit_goals_widget.dart';
 
 class GoalsScreen extends StatelessWidget {
@@ -61,6 +60,7 @@ class GoalsScreen extends StatelessWidget {
                                     "id": goal["id"],
                                     "label": goal["label"],
                                     "dateTime": goal["dateTime"].toDate(),
+                                    "complete": goal["complete"],
                                   }),
                                   goalsDocId: goal.id,
                                 ),
@@ -71,6 +71,8 @@ class GoalsScreen extends StatelessWidget {
                         ),
                       ),
                       onDismissed: (direction) async {
+                        // * Hapus goals.
+
                         FirebaseFirestore firestore =
                             FirebaseFirestore.instance;
                         CollectionReference goalsCollection =

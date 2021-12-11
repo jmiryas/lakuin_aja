@@ -22,7 +22,7 @@ class DrawerNavigationWidget extends StatelessWidget {
               color: Colors.blue,
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage("images/wallpaper.png"),
+                image: AssetImage(kAppDrawerWallpaper),
               ),
             ),
             child: Align(
@@ -52,6 +52,7 @@ class DrawerNavigationWidget extends StatelessWidget {
             ),
             title: Text(user.displayName!),
             subtitle: Text(user.email!),
+            trailing: const Text("Logout"),
             onTap: () {
               showDialog(
                   context: context,

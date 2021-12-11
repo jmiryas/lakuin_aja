@@ -1,4 +1,10 @@
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../data/constant_data.dart';
+import '../models/goals_model.dart';
 
 class AddEditGoalsWidget extends StatelessWidget {
   const AddEditGoalsWidget({
@@ -7,6 +13,7 @@ class AddEditGoalsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     TextEditingController goalsController = TextEditingController();
 
     return AlertDialog(
@@ -35,7 +42,49 @@ class AddEditGoalsWidget extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
+            if (goalsController.text.isEmpty) {
+              return showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text(
+                    "Error!",
+                    textAlign: TextAlign.center,
+                  ),
+                  content: const Text("Goals tidak boleh kosong!"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("OK"),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              const uuid = Uuid();
+
+              GoalsModel goals = GoalsModel(
+                uid: user!.uid,
+                id: uuid.v4(),
+                label: goalsController.text,
+                dateTime: DateTime.now(),
+              );
+
+              FirebaseFirestore firestore = FirebaseFirestore.instance;
+              CollectionReference goalsCollection =
+                  firestore.collection(kGoalsCollection);
+
+              await goalsCollection.add(goals.toMap());
+            }
+
             Navigator.pop(context);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Goals berhasil dibuat!"),
+              ),
+            );
           },
           child: const Text("Simpan"),
         ),

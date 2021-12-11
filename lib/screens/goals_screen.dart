@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lakuin_aja/enum/goals_enum.dart';
+import 'package:lakuin_aja/models/goals_model.dart';
 
 import '../data/constant_data.dart';
 import '../widgets/add_edit_goals_widget.dart';
@@ -46,6 +49,25 @@ class GoalsScreen extends StatelessWidget {
                       child: Card(
                         child: ListTile(
                           title: Text(goal["label"]),
+                          trailing: IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AddEditGoalsWidget(
+                                  title: "Edit Goals",
+                                  goalsType: GoalsType.edit,
+                                  goals: GoalsModel.fromJson({
+                                    "uid": goal["uid"],
+                                    "id": goal["id"],
+                                    "label": goal["label"],
+                                    "dateTime": goal["dateTime"].toDate(),
+                                  }),
+                                  goalsDocId: goal.id,
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.edit),
+                          ),
                         ),
                       ),
                       onDismissed: (direction) async {
@@ -84,7 +106,10 @@ class GoalsScreen extends StatelessWidget {
         onPressed: () {
           showDialog(
             context: context,
-            builder: (context) => const AddEditGoalsWidget(),
+            builder: (context) => const AddEditGoalsWidget(
+              title: "Tambah Goals",
+              goalsType: GoalsType.add,
+            ),
           );
         },
         child: const Icon(Icons.add),

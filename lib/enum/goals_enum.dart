@@ -1,0 +1,4 @@
+enum GoalsType {
+  add,
+  edit,
+}

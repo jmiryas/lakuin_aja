@@ -3,11 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../enum/goals_enum.dart';
 import '../data/constant_data.dart';
 import '../models/goals_model.dart';
 
 class AddEditGoalsWidget extends StatelessWidget {
+  final String title;
+  final GoalsType? goalsType;
+  final GoalsModel? goals;
+  final String? goalsDocId;
+
   const AddEditGoalsWidget({
+    required this.title,
+    required this.goalsType,
+    this.goals,
+    this.goalsDocId,
     Key? key,
   }) : super(key: key);
 
@@ -16,9 +26,13 @@ class AddEditGoalsWidget extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     TextEditingController goalsController = TextEditingController();
 
+    if (goalsType == GoalsType.edit) {
+      goalsController.text = goals!.label;
+    }
+
     return AlertDialog(
-      title: const Text(
-        "Tambah Goals",
+      title: Text(
+        title,
         textAlign: TextAlign.center,
       ),
       content: SingleChildScrollView(
@@ -62,29 +76,49 @@ class AddEditGoalsWidget extends StatelessWidget {
                 ),
               );
             } else {
-              const uuid = Uuid();
+              if (goalsType == GoalsType.add) {
+                const uuid = Uuid();
 
-              GoalsModel goals = GoalsModel(
-                uid: user!.uid,
-                id: uuid.v4(),
-                label: goalsController.text,
-                dateTime: DateTime.now(),
-              );
+                GoalsModel goals = GoalsModel(
+                  uid: user!.uid,
+                  id: uuid.v4(),
+                  label: goalsController.text,
+                  dateTime: DateTime.now(),
+                );
 
-              FirebaseFirestore firestore = FirebaseFirestore.instance;
-              CollectionReference goalsCollection =
-                  firestore.collection(kGoalsCollection);
+                FirebaseFirestore firestore = FirebaseFirestore.instance;
+                CollectionReference goalsCollection =
+                    firestore.collection(kGoalsCollection);
 
-              await goalsCollection.add(goals.toMap());
+                await goalsCollection.add(goals.toMap());
+
+                goalsController.clear();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Goals berhasil dibuat!"),
+                  ),
+                );
+              } else {
+                FirebaseFirestore firestore = FirebaseFirestore.instance;
+                CollectionReference goalsCollection =
+                    firestore.collection(kGoalsCollection);
+
+                await goalsCollection.doc(goalsDocId).update({
+                  "label": goalsController.text,
+                });
+
+                goalsController.clear();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Goals berhasil diupdate!"),
+                  ),
+                );
+              }
             }
 
             Navigator.pop(context);
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Goals berhasil dibuat!"),
-              ),
-            );
           },
           child: const Text("Simpan"),
         ),

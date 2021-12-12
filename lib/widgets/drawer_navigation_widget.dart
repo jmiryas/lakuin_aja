@@ -59,7 +59,10 @@ class DrawerNavigationWidget extends StatelessWidget {
                   barrierDismissible: false,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text("Log Out?"),
+                      title: const Text(
+                        "Log Out?",
+                        textAlign: TextAlign.center,
+                      ),
                       content: const Text("Keluar dari aplikasi?"),
                       actions: [
                         TextButton(

@@ -20,6 +20,7 @@ dependencies:
   cloud_firestore: ^3.1.4
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^9.2.0
+  multi_select_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:

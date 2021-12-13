@@ -15,6 +15,8 @@ class TargetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
 
+    DateTime _currentDateTime = DateTime.parse("1998-12-28");
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Target"),
@@ -35,6 +37,8 @@ class TargetScreen extends StatelessWidget {
                   children: snapshot.data!.docs.map((target) {
                     String formattedDate = DateFormat("dd MMMM yyyy")
                         .format(target["dateTime"].toDate());
+
+                    _currentDateTime = target["dateTime"].toDate();
 
                     return Dismissible(
                         background: Container(
@@ -110,7 +114,10 @@ class TargetScreen extends StatelessWidget {
               context: context,
               barrierDismissible: false,
               builder: (BuildContext context) {
-                return AddTargetWidget(goalsList: goalsList);
+                return AddTargetWidget(
+                  goalsList: goalsList,
+                  currentDateTime: _currentDateTime,
+                );
               });
         },
         child: const Icon(Icons.add),

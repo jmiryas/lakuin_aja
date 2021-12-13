@@ -10,15 +10,19 @@ import '../widgets/alert_widget.dart';
 
 class AddTargetWidget extends StatelessWidget {
   final List<GoalsModel> goalsList;
+  final DateTime currentDateTime;
 
-  const AddTargetWidget({Key? key, required this.goalsList}) : super(key: key);
+  const AddTargetWidget({
+    Key? key,
+    required this.goalsList,
+    required this.currentDateTime,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
 
     List<GoalsModel?> _selectedGoalsList = [];
-    DateTime _currentDateTime = DateTime.now();
 
     return AlertDialog(
       title: const Text(
@@ -59,6 +63,8 @@ class AddTargetWidget extends StatelessWidget {
         TextButton(
           child: const Text("Simpan"),
           onPressed: () async {
+            // * Jika goals tidak dipilih, tampilkan error
+
             if (_selectedGoalsList.isEmpty) {
               showDialog(
                 context: context,
@@ -68,9 +74,11 @@ class AddTargetWidget extends StatelessWidget {
                 },
               );
             } else {
-              if (_currentDateTime.day == DateTime.now().day &&
-                  _currentDateTime.month == DateTime.now().month &&
-                  _currentDateTime.year == DateTime.now().year) {
+              // * Jika target untuk hari ini sudah ada, tampilkan error
+
+              if (currentDateTime.day == DateTime.now().day &&
+                  currentDateTime.month == DateTime.now().month &&
+                  currentDateTime.year == DateTime.now().year) {
                 showDialog(
                   context: context,
                   builder: (context) {
@@ -79,6 +87,8 @@ class AddTargetWidget extends StatelessWidget {
                   },
                 );
               } else {
+                // * Tambahkan target
+
                 const uuid = Uuid();
 
                 FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -91,17 +101,17 @@ class AddTargetWidget extends StatelessWidget {
                   "dateTime": DateTime.now(),
                   "goalsList":
                       _selectedGoalsList.map((item) => item!.toMap()).toList()
+                }).whenComplete(() {
+                  Navigator.of(context).pop();
+
+                  _selectedGoalsList.clear();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Target berhasil dibuat!"),
+                    ),
+                  );
                 });
-
-                _selectedGoalsList.clear();
-
-                Navigator.of(context).pop();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Target berhasil dibuat!"),
-                  ),
-                );
               }
             }
           },

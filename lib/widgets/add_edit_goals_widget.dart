@@ -94,15 +94,17 @@ class AddEditGoalsWidget extends StatelessWidget {
                 CollectionReference goalsCollection =
                     firestore.collection(kGoalsCollection);
 
-                await goalsCollection.add(goals.toMap());
+                await goalsCollection.add(goals.toMap()).whenComplete(() {
+                  Navigator.pop(context);
 
-                goalsController.clear();
+                  goalsController.clear();
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Goals berhasil dibuat!"),
-                  ),
-                );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Goals berhasil dibuat!"),
+                    ),
+                  );
+                });
               } else if (goalsType == GoalsType.edit) {
                 // * Edit goals.
 
@@ -112,19 +114,19 @@ class AddEditGoalsWidget extends StatelessWidget {
 
                 await goalsCollection.doc(goalsDocId).update({
                   "label": goalsController.text,
+                }).whenComplete(() {
+                  Navigator.pop(context);
+
+                  goalsController.clear();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Goals berhasil diupdate!"),
+                    ),
+                  );
                 });
-
-                goalsController.clear();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Goals berhasil diupdate!"),
-                  ),
-                );
               }
             }
-
-            Navigator.pop(context);
           },
           child: const Text("Simpan"),
         ),

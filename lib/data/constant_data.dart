@@ -5,3 +5,4 @@ const kAppDrawerWallpaper = "images/wallpaper.png";
 // Firebase
 
 const kGoalsCollection = "goals";
+const kTargetsCollection = "targets";

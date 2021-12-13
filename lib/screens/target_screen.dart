@@ -1,3 +1,6 @@
+import 'package:intl/intl.dart';
+import 'package:lakuin_aja/widgets/alert_widget.dart';
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +18,7 @@ class TargetScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     List<GoalsModel?> _selectedGoalsList = [];
+    DateTime _currentDateTime = DateTime.now();
 
     return Scaffold(
       appBar: AppBar(
@@ -23,15 +27,26 @@ class TargetScreen extends StatelessWidget {
       ),
       drawer: const DrawerNavigationWidget(),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("targets").snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection("targets")
+              .where("uid", isEqualTo: user!.uid)
+              .orderBy("dateTime", descending: true)
+              .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data!.size > 0) {
                 return ListView(
                   padding: const EdgeInsets.all(20.0),
                   children: snapshot.data!.docs.map((target) {
-                    return ListTile(
-                      title: Text("test"),
+                    String formattedDate = DateFormat("dd MMMM yyyy")
+                        .format(target["dateTime"].toDate());
+
+                    _currentDateTime = target["dateTime"].toDate();
+
+                    return Card(
+                      child: ListTile(
+                        title: Text("Target $formattedDate"),
+                      ),
                     );
                   }).toList(),
                 );
@@ -54,7 +69,7 @@ class TargetScreen extends StatelessWidget {
         onPressed: () async {
           final goalsCollection = await FirebaseFirestore.instance
               .collection(kGoalsCollection)
-              .where("uid", isEqualTo: user!.uid)
+              .where("uid", isEqualTo: user.uid)
               .orderBy("dateTime")
               .get();
 
@@ -110,10 +125,56 @@ class TargetScreen extends StatelessWidget {
                     ),
                     TextButton(
                       child: const Text("Simpan"),
-                      onPressed: () {
-                        print(_selectedGoalsList);
+                      onPressed: () async {
+                        if (_selectedGoalsList.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const AlertWidget(
+                                  title: "Error!",
+                                  content: "Goals tidak boleh kosong.");
+                            },
+                          );
+                        } else {
+                          if (_currentDateTime.day == DateTime.now().day &&
+                              _currentDateTime.month == DateTime.now().month &&
+                              _currentDateTime.year == DateTime.now().year) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const AlertWidget(
+                                    title: "Error!",
+                                    content: "Target hari ini sudah ada.");
+                              },
+                            );
+                          } else {
+                            const uuid = Uuid();
 
-                        Navigator.of(context).pop();
+                            FirebaseFirestore firestore =
+                                FirebaseFirestore.instance;
+                            CollectionReference targetsCollection =
+                                firestore.collection(kTargetsCollection);
+
+                            await targetsCollection.add({
+                              "id": uuid.v4(),
+                              "uid": user.uid,
+                              "dateTime": DateTime.now(),
+                              "goalsList": _selectedGoalsList
+                                  .map((item) => item!.toMap())
+                                  .toList()
+                            });
+
+                            _selectedGoalsList.clear();
+
+                            Navigator.of(context).pop();
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Target berhasil dibuat!"),
+                              ),
+                            );
+                          }
+                        }
                       },
                     ),
                   ],

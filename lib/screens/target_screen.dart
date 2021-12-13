@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/goals_model.dart';
 import '../data/constant_data.dart';
+import '../models/target_model.dart';
 import '../widgets/add_target_widget.dart';
 import '../widgets/drawer_navigation_widget.dart';
 
@@ -15,6 +16,7 @@ class TargetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
 
+    int targetIndex = 0;
     DateTime _currentDateTime = DateTime.parse("1998-12-28");
 
     return Scaffold(
@@ -35,10 +37,11 @@ class TargetScreen extends StatelessWidget {
                 return ListView(
                   padding: const EdgeInsets.all(20.0),
                   children: snapshot.data!.docs.map((target) {
-                    String formattedDate = DateFormat("dd MMMM yyyy")
+                    String formattedDate = DateFormat("EEEE, dd MMMM yyyy")
                         .format(target["dateTime"].toDate());
 
                     _currentDateTime = target["dateTime"].toDate();
+                    targetIndex += 1;
 
                     return Dismissible(
                         background: Container(
@@ -56,7 +59,21 @@ class TargetScreen extends StatelessWidget {
                         key: Key(target["id"]),
                         child: Card(
                           child: ListTile(
-                            title: Text("Target $formattedDate"),
+                            leading: SizedBox(
+                              height: 50.0,
+                              child: CircleAvatar(
+                                radius: 10.0,
+                                backgroundColor: TargetModel.getTargetColor(
+                                    target["dateTime"].toDate()),
+                              ),
+                            ),
+                            title: Text(
+                              "TARGET #$targetIndex",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(formattedDate),
                           ),
                         ),
                         onDismissed: (direction) async {
@@ -94,6 +111,8 @@ class TargetScreen extends StatelessWidget {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          // * Add target
+
           final goalsCollection = await FirebaseFirestore.instance
               .collection(kGoalsCollection)
               .where("uid", isEqualTo: user.uid)

@@ -36,11 +36,41 @@ class TargetScreen extends StatelessWidget {
                     String formattedDate = DateFormat("dd MMMM yyyy")
                         .format(target["dateTime"].toDate());
 
-                    return Card(
-                      child: ListTile(
-                        title: Text("Target $formattedDate"),
-                      ),
-                    );
+                    return Dismissible(
+                        background: Container(
+                          color: Colors.red.shade300,
+                          child: const Center(
+                            child: Text(
+                              "Hapus?",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        key: Key(target["id"]),
+                        child: Card(
+                          child: ListTile(
+                            title: Text("Target $formattedDate"),
+                          ),
+                        ),
+                        onDismissed: (direction) async {
+                          // * Hapus target.
+
+                          FirebaseFirestore firestore =
+                              FirebaseFirestore.instance;
+                          CollectionReference targetsCollection =
+                              firestore.collection(kTargetsCollection);
+
+                          await targetsCollection.doc(target.id).delete();
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Target berhasil dihapus!"),
+                            ),
+                          );
+                        });
                   }).toList(),
                 );
               } else {

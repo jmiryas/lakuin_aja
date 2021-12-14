@@ -32,67 +32,74 @@ class TargetScreen extends StatelessWidget {
               .orderBy("dateTime", descending: true)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            targetIndex = 0;
+
             if (snapshot.hasData) {
               if (snapshot.data!.size > 0) {
                 return ListView(
                   padding: const EdgeInsets.all(20.0),
-                  children: snapshot.data!.docs.map((target) {
-                    String formattedDate = DateFormat("EEEE, dd MMMM yyyy")
-                        .format(target["dateTime"].toDate());
+                  children: snapshot.data!.docs.map(
+                    (target) {
+                      String formattedDate = DateFormat("EEEE, dd MMMM yyyy")
+                          .format(target["dateTime"].toDate());
 
-                    _currentDateTime = target["dateTime"].toDate();
-                    targetIndex += 1;
+                      if (targetIndex < 1) {
+                        _currentDateTime = target["dateTime"].toDate();
+                      }
 
-                    return Dismissible(
-                        background: Container(
-                          color: Colors.red.shade300,
-                          child: const Center(
-                            child: Text(
-                              "Hapus?",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                      targetIndex += 1;
+
+                      return Dismissible(
+                          background: Container(
+                            color: Colors.red.shade300,
+                            child: const Center(
+                              child: Text(
+                                "Hapus?",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        key: Key(target["id"]),
-                        child: Card(
-                          child: ListTile(
-                            leading: SizedBox(
-                              height: 50.0,
-                              child: CircleAvatar(
-                                radius: 10.0,
-                                backgroundColor: TargetModel.getTargetColor(
-                                    target["dateTime"].toDate()),
+                          key: Key(target["id"]),
+                          child: Card(
+                            child: ListTile(
+                              leading: SizedBox(
+                                height: 50.0,
+                                child: CircleAvatar(
+                                  radius: 10.0,
+                                  backgroundColor: TargetModel.getTargetColor(
+                                      target["dateTime"].toDate()),
+                                ),
                               ),
-                            ),
-                            title: Text(
-                              "TARGET #$targetIndex",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                              title: Text(
+                                "TARGET #$targetIndex",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
+                              subtitle: Text(formattedDate),
                             ),
-                            subtitle: Text(formattedDate),
                           ),
-                        ),
-                        onDismissed: (direction) async {
-                          // * Hapus target.
+                          onDismissed: (direction) async {
+                            // * Hapus target.
 
-                          FirebaseFirestore firestore =
-                              FirebaseFirestore.instance;
-                          CollectionReference targetsCollection =
-                              firestore.collection(kTargetsCollection);
+                            FirebaseFirestore firestore =
+                                FirebaseFirestore.instance;
+                            CollectionReference targetsCollection =
+                                firestore.collection(kTargetsCollection);
 
-                          await targetsCollection.doc(target.id).delete();
+                            await targetsCollection.doc(target.id).delete();
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Target berhasil dihapus!"),
-                            ),
-                          );
-                        });
-                  }).toList(),
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Target berhasil dihapus!"),
+                              ),
+                            );
+                          });
+                    },
+                  ).toList(),
                 );
               } else {
                 return const Center(

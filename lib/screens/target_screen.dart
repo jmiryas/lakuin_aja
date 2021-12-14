@@ -2,11 +2,11 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lakuin_aja/config/custom_app_route.dart';
 
 import '../models/goals_model.dart';
 import '../data/constant_data.dart';
 import '../models/target_model.dart';
+import '../config/custom_app_route.dart';
 import '../widgets/add_target_widget.dart';
 import '../widgets/drawer_navigation_widget.dart';
 
@@ -67,8 +67,6 @@ class TargetScreen extends StatelessWidget {
                           child: Card(
                             child: ListTile(
                               onTap: () {
-                                print(target.id);
-
                                 List<GoalsModel> goalsList = [];
 
                                 target["goalsList"].map(
@@ -89,6 +87,9 @@ class TargetScreen extends StatelessWidget {
                                   dateTime: target["dateTime"].toDate(),
                                   goalsList: goalsList,
                                 );
+
+                                // TODO: Tambahkan complete goals.
+                                // * Ubah icon menjadi complete jika goals sudah selesai.
 
                                 Navigator.pushNamed(
                                   context,

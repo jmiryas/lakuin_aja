@@ -8,6 +8,7 @@ class CustomAppRoute {
   static const String goalsScreen = "/goals";
   static const String signInScreen = "/signIn";
   static const String targetScreen = "/target";
+  static const String targetDetailsScreen = "/target-details";
 
   // * Go to route:
 

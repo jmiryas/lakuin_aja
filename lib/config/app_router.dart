@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lakuin_aja/models/target_model.dart';
+import 'package:lakuin_aja/screens/target_details_screen.dart';
 
 import '../screens/home_screen.dart';
 import '../screens/goals_screen.dart';
@@ -22,6 +24,10 @@ class AppRouter {
       case CustomAppRoute.goalsScreen:
         return CustomAppRoute.goToRoute(
             const GoalsScreen(), CustomAppRoute.goalsScreen);
+      case CustomAppRoute.targetDetailsScreen:
+        return CustomAppRoute.goToRoute(
+            TargetDetailsScreen(target: settings.arguments as TargetModel),
+            CustomAppRoute.targetDetailsScreen);
       default:
         return CustomAppRoute.goToRoute(
             const ErrorScreen(), CustomAppRoute.errorScreen);

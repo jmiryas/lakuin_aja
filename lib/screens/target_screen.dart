@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lakuin_aja/config/custom_app_route.dart';
 
 import '../models/goals_model.dart';
 import '../data/constant_data.dart';
@@ -65,6 +66,36 @@ class TargetScreen extends StatelessWidget {
                           key: Key(target["id"]),
                           child: Card(
                             child: ListTile(
+                              onTap: () {
+                                print(target.id);
+
+                                List<GoalsModel> goalsList = [];
+
+                                target["goalsList"].map(
+                                  (item) {
+                                    goalsList.add(GoalsModel(
+                                      uid: item["uid"],
+                                      id: item["id"],
+                                      label: item["label"],
+                                      dateTime: item["dateTime"].toDate(),
+                                      complete: item["complete"],
+                                    ));
+                                  },
+                                ).toList();
+
+                                TargetModel targetModel = TargetModel(
+                                  id: target["id"],
+                                  uid: target["uid"],
+                                  dateTime: target["dateTime"].toDate(),
+                                  goalsList: goalsList,
+                                );
+
+                                Navigator.pushNamed(
+                                  context,
+                                  CustomAppRoute.targetDetailsScreen,
+                                  arguments: targetModel,
+                                );
+                              },
                               leading: SizedBox(
                                 height: 50.0,
                                 child: CircleAvatar(

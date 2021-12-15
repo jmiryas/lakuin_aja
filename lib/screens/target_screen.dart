@@ -67,34 +67,10 @@ class TargetScreen extends StatelessWidget {
                         child: Card(
                           child: ListTile(
                             onTap: () {
-                              List<GoalsModel> goalsList = [];
-
-                              target["goalsList"].map(
-                                (item) {
-                                  goalsList.add(GoalsModel(
-                                    uid: item["uid"],
-                                    id: item["id"],
-                                    label: item["label"],
-                                    dateTime: item["dateTime"].toDate(),
-                                    complete: item["complete"],
-                                  ));
-                                },
-                              ).toList();
-
-                              TargetModel targetModel = TargetModel(
-                                id: target["id"],
-                                uid: target["uid"],
-                                dateTime: target["dateTime"].toDate(),
-                                goalsList: goalsList,
-                              );
-
-                              // * Ubah icon menjadi complete jika goals sudah selesai.
-
                               Navigator.pushNamed(
                                 context,
                                 CustomAppRoute.targetDetailsScreen,
                                 arguments: {
-                                  "target": targetModel,
                                   "targetDocId": target.id,
                                 },
                               );

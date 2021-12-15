@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../models/target_model.dart';
 import '../screens/home_screen.dart';
 import '../screens/goals_screen.dart';
 import '../screens/error_screen.dart';
@@ -29,7 +28,6 @@ class AppRouter {
 
         return CustomAppRoute.goToRoute(
             TargetDetailsScreen(
-              target: targetArgs["target"],
               targetDocId: targetArgs["targetDocId"],
             ),
             CustomAppRoute.targetDetailsScreen);

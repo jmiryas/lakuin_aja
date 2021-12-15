@@ -25,8 +25,13 @@ class AppRouter {
         return CustomAppRoute.goToRoute(
             const GoalsScreen(), CustomAppRoute.goalsScreen);
       case CustomAppRoute.targetDetailsScreen:
+        final targetArgs = settings.arguments as Map<String, dynamic>;
+
         return CustomAppRoute.goToRoute(
-            TargetDetailsScreen(target: settings.arguments as TargetModel),
+            TargetDetailsScreen(
+              target: targetArgs["target"],
+              targetDocId: targetArgs["targetDocId"],
+            ),
             CustomAppRoute.targetDetailsScreen);
       default:
         return CustomAppRoute.goToRoute(

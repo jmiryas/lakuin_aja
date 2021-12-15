@@ -1,13 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:lakuin_aja/data/constant_data.dart';
+import 'package:lakuin_aja/models/goals_model.dart';
 
 import '../models/target_model.dart';
 
 class TargetDetailsScreen extends StatelessWidget {
   final TargetModel target;
+  final String targetDocId;
   const TargetDetailsScreen({
     Key? key,
     required this.target,
+    required this.targetDocId,
   }) : super(key: key);
 
   @override
@@ -48,13 +53,47 @@ class TargetDetailsScreen extends StatelessWidget {
                     child: ListTile(
                       title: Text(goal.label),
                       trailing: goal.complete
-                          ? Icon(
+                          ? const Icon(
                               Icons.check_circle,
                               color: Colors.green,
                             )
-                          : Icon(
+                          : const Icon(
                               Icons.check_circle_outline_rounded,
                             ),
+                      onTap: () async {
+                        List<GoalsModel> othersGoals = target.goalsList
+                            .where((item) => item.id != goal.id)
+                            .toList();
+
+                        final otherGoalsMap =
+                            othersGoals.map((item) => item.toMap()).toList();
+
+                        FirebaseFirestore firestore =
+                            FirebaseFirestore.instance;
+                        CollectionReference targetsCollection =
+                            firestore.collection(kTargetsCollection);
+
+                        await targetsCollection.doc(targetDocId).update(
+                          {
+                            "goalsList": [
+                              ...otherGoalsMap,
+                              GoalsModel(
+                                uid: goal.uid,
+                                id: goal.id,
+                                label: goal.label,
+                                dateTime: goal.dateTime,
+                                complete: !goal.complete,
+                              ).toMap(),
+                            ]
+                          },
+                        ).whenComplete(
+                          () => ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Goal berhasil diupdate!"),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   );
                 }).toList(),

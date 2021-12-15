@@ -51,85 +51,92 @@ class TargetScreen extends StatelessWidget {
                       targetIndex += 1;
 
                       return Dismissible(
-                          background: Container(
-                            color: Colors.red.shade300,
-                            child: const Center(
-                              child: Text(
-                                "Hapus?",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        background: Container(
+                          color: Colors.red.shade300,
+                          child: const Center(
+                            child: Text(
+                              "Hapus?",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          key: Key(target["id"]),
-                          child: Card(
-                            child: ListTile(
-                              onTap: () {
-                                List<GoalsModel> goalsList = [];
+                        ),
+                        key: Key(target["id"]),
+                        child: Card(
+                          child: ListTile(
+                            onTap: () {
+                              List<GoalsModel> goalsList = [];
 
-                                target["goalsList"].map(
-                                  (item) {
-                                    goalsList.add(GoalsModel(
-                                      uid: item["uid"],
-                                      id: item["id"],
-                                      label: item["label"],
-                                      dateTime: item["dateTime"].toDate(),
-                                      complete: item["complete"],
-                                    ));
-                                  },
-                                ).toList();
+                              target["goalsList"].map(
+                                (item) {
+                                  goalsList.add(GoalsModel(
+                                    uid: item["uid"],
+                                    id: item["id"],
+                                    label: item["label"],
+                                    dateTime: item["dateTime"].toDate(),
+                                    complete: item["complete"],
+                                  ));
+                                },
+                              ).toList();
 
-                                TargetModel targetModel = TargetModel(
-                                  id: target["id"],
-                                  uid: target["uid"],
-                                  dateTime: target["dateTime"].toDate(),
-                                  goalsList: goalsList,
-                                );
+                              TargetModel targetModel = TargetModel(
+                                id: target["id"],
+                                uid: target["uid"],
+                                dateTime: target["dateTime"].toDate(),
+                                goalsList: goalsList,
+                              );
 
-                                // TODO: Tambahkan complete goals.
-                                // * Ubah icon menjadi complete jika goals sudah selesai.
+                              // * Ubah icon menjadi complete jika goals sudah selesai.
 
-                                Navigator.pushNamed(
-                                  context,
-                                  CustomAppRoute.targetDetailsScreen,
-                                  arguments: targetModel,
-                                );
-                              },
-                              leading: SizedBox(
-                                height: 50.0,
-                                child: CircleAvatar(
-                                  radius: 10.0,
-                                  backgroundColor: TargetModel.getTargetColor(
-                                      target["dateTime"].toDate()),
-                                ),
+                              Navigator.pushNamed(
+                                context,
+                                CustomAppRoute.targetDetailsScreen,
+                                arguments: {
+                                  "target": targetModel,
+                                  "targetDocId": target.id,
+                                },
+                              );
+                            },
+                            leading: SizedBox(
+                              height: 50.0,
+                              child: CircleAvatar(
+                                radius: 10.0,
+                                backgroundColor: TargetModel.getTargetColor(
+                                    target["dateTime"].toDate()),
                               ),
-                              title: Text(
-                                "TARGET #$targetIndex",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text(formattedDate),
                             ),
-                          ),
-                          onDismissed: (direction) async {
-                            // * Hapus target.
-
-                            FirebaseFirestore firestore =
-                                FirebaseFirestore.instance;
-                            CollectionReference targetsCollection =
-                                firestore.collection(kTargetsCollection);
-
-                            await targetsCollection.doc(target.id).delete();
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Target berhasil dihapus!"),
+                            title: Text(
+                              "TARGET #$targetIndex",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
                               ),
-                            );
-                          });
+                            ),
+                            subtitle: Text(formattedDate),
+                          ),
+                        ),
+                        onDismissed: (direction) async {
+                          // * Hapus target.
+
+                          FirebaseFirestore firestore =
+                              FirebaseFirestore.instance;
+                          CollectionReference targetsCollection =
+                              firestore.collection(kTargetsCollection);
+
+                          await targetsCollection
+                              .doc(target.id)
+                              .delete()
+                              .whenComplete(
+                                () =>
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Target berhasil dihapus!"),
+                                  ),
+                                ),
+                              );
+                        },
+                      );
                     },
                   ).toList(),
                 );

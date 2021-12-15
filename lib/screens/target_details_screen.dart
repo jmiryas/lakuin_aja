@@ -96,7 +96,6 @@ class TargetDetailsScreen extends StatelessWidget {
                                           .update(
                                         {
                                           "goalsList": [
-                                            ...othersGoals,
                                             GoalsModel(
                                               uid: currentGoal.uid,
                                               id: currentGoal.id,
@@ -104,6 +103,7 @@ class TargetDetailsScreen extends StatelessWidget {
                                               dateTime: currentGoal.dateTime,
                                               complete: !currentGoal.complete,
                                             ).toMap(),
+                                            ...othersGoals,
                                           ]
                                         },
                                       ).whenComplete(

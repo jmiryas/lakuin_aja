@@ -1,6 +1,6 @@
 # lakuin aja
 
-Sebuah aplikasi untuk menulis target harian. Aplikasi ini dibuat untuk melakukan tracking terhadap target-target yang ingin dicapai selama sehari.
+Sebuah aplikasi untuk menulis target harian. Aplikasi ini dibuat untuk melakukan tracking terhadap target-target yang ingin dicapai selama sehari. Current version: 0.1.0-alpha.
 
 ## Author
 

@@ -91,30 +91,30 @@ class TargetDetailsScreen extends StatelessWidget {
                                           firestore
                                               .collection(kTargetsCollection);
 
-                                      await targetsCollection
-                                          .doc(targetDocId)
-                                          .update(
-                                        {
-                                          "goalsList": [
-                                            GoalsModel(
-                                              uid: currentGoal.uid,
-                                              id: currentGoal.id,
-                                              label: currentGoal.label,
-                                              dateTime: currentGoal.dateTime,
-                                              complete: !currentGoal.complete,
-                                            ).toMap(),
-                                            ...othersGoals,
-                                          ]
-                                        },
-                                      ).whenComplete(
-                                        () => ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content:
-                                                Text("Goal berhasil diupdate!"),
-                                          ),
-                                        ),
-                                      );
+                                      // await targetsCollection
+                                      //     .doc(targetDocId)
+                                      //     .update(
+                                      //   {
+                                      //     "goalsList": [
+                                      //       GoalsModel(
+                                      //         uid: currentGoal.uid,
+                                      //         id: currentGoal.id,
+                                      //         label: currentGoal.label,
+                                      //         dateTime: currentGoal.dateTime,
+                                      //         complete: !currentGoal.complete,
+                                      //       ).toMap(),
+                                      //       ...othersGoals,
+                                      //     ]
+                                      //   },
+                                      // ).whenComplete(
+                                      //   () => ScaffoldMessenger.of(context)
+                                      //       .showSnackBar(
+                                      //     const SnackBar(
+                                      //       content:
+                                      //           Text("Goal berhasil diupdate!"),
+                                      //     ),
+                                      //   ),
+                                      // );
                                     },
                                   ),
                                 );

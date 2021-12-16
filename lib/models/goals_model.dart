@@ -3,6 +3,8 @@ class GoalsModel {
   final String id;
   final String label;
   final DateTime dateTime;
+  final DateTime startTime;
+  final DateTime endTime;
   final bool complete;
 
   GoalsModel({
@@ -10,6 +12,8 @@ class GoalsModel {
     required this.id,
     required this.label,
     required this.dateTime,
+    required this.startTime,
+    required this.endTime,
     this.complete = false,
   });
 
@@ -19,6 +23,8 @@ class GoalsModel {
       "id": id,
       "label": label,
       "dateTime": dateTime,
+      "startTime": startTime,
+      "endTime": endTime,
       "complete": complete,
     };
   }
@@ -29,6 +35,8 @@ class GoalsModel {
       id: json["id"],
       label: json["label"],
       dateTime: json["dateTime"],
+      startTime: json["startTime"],
+      endTime: json["endTime"],
       complete: json["complete"],
     );
   }

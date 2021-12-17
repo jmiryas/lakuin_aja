@@ -148,6 +148,8 @@ class TargetScreen extends StatelessWidget {
                     "label": goal.data()["label"],
                     "dateTime": goal.data()["dateTime"].toDate(),
                     "complete": goal.data()["complete"],
+                    "startTime": goal.data()["startTime"].toDate(),
+                    "endTime": goal.data()["endTime"].toDate(),
                   }))
               .toList();
 

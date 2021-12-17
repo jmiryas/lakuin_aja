@@ -46,4 +46,8 @@ class GoalsModel {
   static getTimeOnly(Timestamp timestamp) {
     return timestamp.toDate().toString().substring(10, 16);
   }
+
+  static getTimeOnlyFromDateTime(DateTime dateTime) {
+    return dateTime.toString().substring(10, 16);
+  }
 }

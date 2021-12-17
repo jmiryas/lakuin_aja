@@ -40,10 +40,12 @@ class AddTargetWidget extends StatelessWidget {
                 ),
                 buttonText: const Text("Pilih Goals"),
                 buttonIcon: const Icon(Icons.expand_more),
-                items: goalsList
-                    .map((goal) =>
-                        MultiSelectItem<GoalsModel?>(goal, goal.label))
-                    .toList(),
+                items: goalsList.map((goal) {
+                  final nameAndDate =
+                      "${goal.label}\n${GoalsModel.getTimeOnlyFromDateTime(goal.startTime)} - ${GoalsModel.getTimeOnlyFromDateTime(goal.endTime)}";
+
+                  return MultiSelectItem<GoalsModel?>(goal, nameAndDate);
+                }).toList(),
                 listType: MultiSelectListType.LIST,
                 onConfirm: (values) {
                   _selectedGoalsList = values as List<GoalsModel?>;

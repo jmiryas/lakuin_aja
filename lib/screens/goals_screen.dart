@@ -48,6 +48,16 @@ class GoalsScreen extends StatelessWidget {
                       child: Card(
                         child: ListTile(
                           title: Text(goal["label"]),
+                          leading: const SizedBox(
+                            width: 15.0,
+                            height: double.infinity,
+                            child: Center(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.amber,
+                                radius: 8.0,
+                              ),
+                            ),
+                          ),
                           subtitle: Text(
                               "${GoalsModel.getTimeOnly(goal['startTime'])} - ${GoalsModel.getTimeOnly(goal['endTime'])}"),
                           trailing: IconButton(
@@ -63,6 +73,8 @@ class GoalsScreen extends StatelessWidget {
                                     "label": goal["label"],
                                     "dateTime": goal["dateTime"].toDate(),
                                     "complete": goal["complete"],
+                                    "startTime": goal["startTime"].toDate(),
+                                    "endTime": goal["endTime"].toDate(),
                                   }),
                                   goalsDocId: goal.id,
                                 ),

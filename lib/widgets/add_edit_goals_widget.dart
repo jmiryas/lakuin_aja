@@ -33,6 +33,9 @@ class AddEditGoalsWidget extends StatelessWidget {
 
     if (goalsType == GoalsType.edit) {
       goalsController.text = goals!.label;
+
+      _startTime = goals!.startTime;
+      _endTime = goals!.endTime;
     }
 
     return AlertDialog(
@@ -77,7 +80,7 @@ class AddEditGoalsWidget extends StatelessWidget {
                                   onDateTimeChanged: (value) {
                                     setState(() => _startTime = value);
                                   },
-                                  initialDateTime: DateTime.now(),
+                                  initialDateTime: _startTime,
                                 ),
                               ),
                               actions: [
@@ -150,7 +153,7 @@ class AddEditGoalsWidget extends StatelessWidget {
                                   onDateTimeChanged: (value) {
                                     setState(() => _endTime = value);
                                   },
-                                  initialDateTime: DateTime.now(),
+                                  initialDateTime: _endTime,
                                 ),
                               ),
                               actions: [
@@ -265,23 +268,25 @@ class AddEditGoalsWidget extends StatelessWidget {
               } else if (goalsType == GoalsType.edit) {
                 // * Edit goals.
 
-                // FirebaseFirestore firestore = FirebaseFirestore.instance;
-                // CollectionReference goalsCollection =
-                //     firestore.collection(kGoalsCollection);
+                FirebaseFirestore firestore = FirebaseFirestore.instance;
+                CollectionReference goalsCollection =
+                    firestore.collection(kGoalsCollection);
 
-                // await goalsCollection.doc(goalsDocId).update({
-                //   "label": goalsController.text,
-                // }).whenComplete(() {
-                //   Navigator.pop(context);
+                await goalsCollection.doc(goalsDocId).update({
+                  "label": goalsController.text,
+                  "startTime": _startTime,
+                  "endTime": _endTime,
+                }).whenComplete(() {
+                  Navigator.pop(context);
 
-                //   goalsController.clear();
+                  goalsController.clear();
 
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     const SnackBar(
-                //       content: Text("Goals berhasil diupdate!"),
-                //     ),
-                //   );
-                // });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Goals berhasil diupdate!"),
+                    ),
+                  );
+                });
               }
             }
           },

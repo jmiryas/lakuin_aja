@@ -14,4 +14,3 @@ Dibuat oleh Rizky Ramadhan dengan menggunakan Flutter. Social media:
 - [ ] Dark/light theme
 - [ ] Remove specific target goal
 - [ ] Add target statistics
-- [ ] Add goals time (start, end)

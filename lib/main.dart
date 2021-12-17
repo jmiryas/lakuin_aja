@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => GoogleSignInProvider(),
-        )
+        ),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

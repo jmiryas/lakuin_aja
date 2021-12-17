@@ -74,6 +74,8 @@ class TargetDetailsScreen extends StatelessWidget {
                                 return Card(
                                   child: ListTile(
                                     title: Text(currentGoal.label),
+                                    subtitle: Text(
+                                        "${GoalsModel.getTimeOnlyFromDateTime(currentGoal.startTime)} - ${GoalsModel.getTimeOnlyFromDateTime(currentGoal.endTime)}"),
                                     trailing: currentGoal.complete
                                         ? const Icon(
                                             Icons.check_circle,

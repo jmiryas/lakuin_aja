@@ -48,6 +48,8 @@ class GoalsScreen extends StatelessWidget {
                       child: Card(
                         child: ListTile(
                           title: Text(goal["label"]),
+                          subtitle: Text(
+                              "${GoalsModel.getTimeOnly(goal['startTime'])} - ${GoalsModel.getTimeOnly(goal['endTime'])}"),
                           trailing: IconButton(
                             onPressed: () {
                               showDialog(

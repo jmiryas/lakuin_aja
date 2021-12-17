@@ -28,6 +28,7 @@ class AddEditGoalsWidget extends StatelessWidget {
 
     TextEditingController goalsController = TextEditingController();
 
+    DateTime _startTime = DateTime.now();
     DateTime _endTime = DateTime.now();
 
     if (goalsType == GoalsType.edit) {
@@ -59,7 +60,43 @@ class AddEditGoalsWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text(
+                                "End Time",
+                                textAlign: TextAlign.center,
+                              ),
+                              content: SizedBox(
+                                height: 200.0,
+                                child: CupertinoDatePicker(
+                                  use24hFormat: true,
+                                  mode: CupertinoDatePickerMode.time,
+                                  onDateTimeChanged: (value) {
+                                    setState(() => _startTime = value);
+                                  },
+                                  initialDateTime: DateTime.now(),
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Batal"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("OK"),
+                                )
+                              ],
+                            );
+                          });
+                    },
                     child: Container(
                       width: MediaQuery.of(context).size.width / 3.5,
                       height: 50.0,
@@ -78,11 +115,11 @@ class AddEditGoalsWidget extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width / 3.5,
                     height: 50.0,
-                    color: Colors.blue,
-                    child: const Center(
+                    color: Colors.blueGrey,
+                    child: Center(
                       child: Text(
-                        "--:--",
-                        style: TextStyle(color: Colors.white),
+                        _startTime.toString().substring(10, 19),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   )
@@ -151,7 +188,7 @@ class AddEditGoalsWidget extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width / 3.5,
                     height: 50.0,
-                    color: Colors.blue,
+                    color: Colors.blueGrey,
                     child: Center(
                       child: Text(
                         _endTime.toString().substring(10, 19),
@@ -198,52 +235,54 @@ class AddEditGoalsWidget extends StatelessWidget {
             } else {
               // * Tambah goals.
 
-              // if (goalsType == GoalsType.add) {
-              //   const uuid = Uuid();
+              if (goalsType == GoalsType.add) {
+                const uuid = Uuid();
 
-              //   GoalsModel goals = GoalsModel(
-              //     uid: user!.uid,
-              //     id: uuid.v4(),
-              //     label: goalsController.text,
-              //     dateTime: DateTime.now(),
-              //   );
+                GoalsModel goals = GoalsModel(
+                  uid: user!.uid,
+                  id: uuid.v4(),
+                  label: goalsController.text,
+                  dateTime: DateTime.now(),
+                  startTime: _startTime,
+                  endTime: _endTime,
+                );
 
-              //   FirebaseFirestore firestore = FirebaseFirestore.instance;
-              //   CollectionReference goalsCollection =
-              //       firestore.collection(kGoalsCollection);
+                FirebaseFirestore firestore = FirebaseFirestore.instance;
+                CollectionReference goalsCollection =
+                    firestore.collection(kGoalsCollection);
 
-              //   await goalsCollection.add(goals.toMap()).whenComplete(() {
-              //     Navigator.pop(context);
+                await goalsCollection.add(goals.toMap()).whenComplete(() {
+                  Navigator.pop(context);
 
-              //     goalsController.clear();
+                  goalsController.clear();
 
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(
-              //         content: Text("Goals berhasil dibuat!"),
-              //       ),
-              //     );
-              //   });
-              // } else if (goalsType == GoalsType.edit) {
-              //   // * Edit goals.
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Goals berhasil dibuat!"),
+                    ),
+                  );
+                });
+              } else if (goalsType == GoalsType.edit) {
+                // * Edit goals.
 
-              //   FirebaseFirestore firestore = FirebaseFirestore.instance;
-              //   CollectionReference goalsCollection =
-              //       firestore.collection(kGoalsCollection);
+                // FirebaseFirestore firestore = FirebaseFirestore.instance;
+                // CollectionReference goalsCollection =
+                //     firestore.collection(kGoalsCollection);
 
-              //   await goalsCollection.doc(goalsDocId).update({
-              //     "label": goalsController.text,
-              //   }).whenComplete(() {
-              //     Navigator.pop(context);
+                // await goalsCollection.doc(goalsDocId).update({
+                //   "label": goalsController.text,
+                // }).whenComplete(() {
+                //   Navigator.pop(context);
 
-              //     goalsController.clear();
+                //   goalsController.clear();
 
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(
-              //         content: Text("Goals berhasil diupdate!"),
-              //       ),
-              //     );
-              //   });
-              // }
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     const SnackBar(
+                //       content: Text("Goals berhasil diupdate!"),
+                //     ),
+                //   );
+                // });
+              }
             }
           },
           child: const Text("Simpan"),

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class GoalsModel {
   final String uid;
   final String id;
@@ -39,5 +41,9 @@ class GoalsModel {
       endTime: json["endTime"],
       complete: json["complete"],
     );
+  }
+
+  static getTimeOnly(Timestamp timestamp) {
+    return timestamp.toDate().toString().substring(10, 16);
   }
 }

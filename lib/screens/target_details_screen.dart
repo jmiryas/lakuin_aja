@@ -59,12 +59,16 @@ class TargetDetailsScreen extends StatelessWidget {
                                 ),
                               ),
                               ...targetItem["goalsList"].map((goal) {
+                                // Mendapatkan goal saat ini
+
                                 final currentGoal = GoalsModel.fromJson({
                                   "id": goal["id"],
                                   "uid": goal["uid"],
                                   "label": goal["label"],
                                   "dateTime": goal["dateTime"].toDate(),
-                                  "complete": goal["complete"]
+                                  "complete": goal["complete"],
+                                  "startTime": goal["startTime"].toDate(),
+                                  "endTime": goal["endTime"].toDate(),
                                 });
 
                                 return Card(
@@ -79,11 +83,28 @@ class TargetDetailsScreen extends StatelessWidget {
                                             Icons.check_circle_outline_rounded,
                                           ),
                                     onTap: () async {
-                                      List<dynamic> othersGoals =
-                                          targetItem["goalsList"]
-                                              .where((item) =>
-                                                  item["id"] != currentGoal.id)
-                                              .toList();
+                                      // Lakukan iterasi, jika id tidak sama, maka
+                                      // tambahkan ke dalam list apa adanya.
+                                      // Jika id sama, maka ubah status complete
+                                      // menjadi sebaliknya.
+
+                                      List<dynamic> otherGoals = [];
+
+                                      targetItem["goalsList"].map((item) {
+                                        if (item["id"] != currentGoal.id) {
+                                          otherGoals.add(item);
+                                        } else {
+                                          otherGoals.add(GoalsModel(
+                                            uid: currentGoal.uid,
+                                            id: currentGoal.id,
+                                            label: currentGoal.label,
+                                            dateTime: currentGoal.dateTime,
+                                            complete: !currentGoal.complete,
+                                            startTime: currentGoal.startTime,
+                                            endTime: currentGoal.endTime,
+                                          ).toMap());
+                                        }
+                                      }).toList();
 
                                       FirebaseFirestore firestore =
                                           FirebaseFirestore.instance;
@@ -91,30 +112,23 @@ class TargetDetailsScreen extends StatelessWidget {
                                           firestore
                                               .collection(kTargetsCollection);
 
-                                      // await targetsCollection
-                                      //     .doc(targetDocId)
-                                      //     .update(
-                                      //   {
-                                      //     "goalsList": [
-                                      //       GoalsModel(
-                                      //         uid: currentGoal.uid,
-                                      //         id: currentGoal.id,
-                                      //         label: currentGoal.label,
-                                      //         dateTime: currentGoal.dateTime,
-                                      //         complete: !currentGoal.complete,
-                                      //       ).toMap(),
-                                      //       ...othersGoals,
-                                      //     ]
-                                      //   },
-                                      // ).whenComplete(
-                                      //   () => ScaffoldMessenger.of(context)
-                                      //       .showSnackBar(
-                                      //     const SnackBar(
-                                      //       content:
-                                      //           Text("Goal berhasil diupdate!"),
-                                      //     ),
-                                      //   ),
-                                      // );
+                                      await targetsCollection
+                                          .doc(targetDocId)
+                                          .update(
+                                        {
+                                          "goalsList": [
+                                            ...otherGoals,
+                                          ]
+                                        },
+                                      ).whenComplete(
+                                        () => ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text("Goal berhasil diupdate!"),
+                                          ),
+                                        ),
+                                      );
                                     },
                                   ),
                                 );

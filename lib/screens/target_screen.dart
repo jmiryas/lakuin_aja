@@ -133,7 +133,9 @@ class TargetScreen extends StatelessWidget {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // * Add target
+          // * Add target harian
+
+          // Mendapatkan seluruh goals
 
           final goalsCollection = await FirebaseFirestore.instance
               .collection(kGoalsCollection)

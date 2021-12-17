@@ -62,56 +62,48 @@ class AddEditGoalsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                "End Time",
-                                textAlign: TextAlign.center,
-                              ),
-                              content: SizedBox(
-                                height: 200.0,
-                                child: CupertinoDatePicker(
-                                  use24hFormat: true,
-                                  mode: CupertinoDatePickerMode.time,
-                                  onDateTimeChanged: (value) {
-                                    setState(() => _startTime = value);
-                                  },
-                                  initialDateTime: _startTime,
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: Size(
+                              MediaQuery.of(context).size.width / 3.5, 50.0)),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  "End Time",
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("Batal"),
+                                content: SizedBox(
+                                  height: 200.0,
+                                  child: CupertinoDatePicker(
+                                    use24hFormat: true,
+                                    mode: CupertinoDatePickerMode.time,
+                                    onDateTimeChanged: (value) {
+                                      setState(() => _startTime = value);
+                                    },
+                                    initialDateTime: _startTime,
+                                  ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("OK"),
-                                )
-                              ],
-                            );
-                          });
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width / 3.5,
-                      height: 50.0,
-                      color: Colors.blue,
-                      child: const Center(
-                        child: Text(
-                          "Start Time",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Batal"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              );
+                            });
+                      },
+                      child: const Text("Start Time")),
                   const SizedBox(
                     width: 10.0,
                   ),
@@ -125,7 +117,7 @@ class AddEditGoalsWidget extends StatelessWidget {
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(
@@ -135,56 +127,48 @@ class AddEditGoalsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                "End Time",
-                                textAlign: TextAlign.center,
-                              ),
-                              content: SizedBox(
-                                height: 200.0,
-                                child: CupertinoDatePicker(
-                                  use24hFormat: true,
-                                  mode: CupertinoDatePickerMode.time,
-                                  onDateTimeChanged: (value) {
-                                    setState(() => _endTime = value);
-                                  },
-                                  initialDateTime: _endTime,
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: Size(
+                              MediaQuery.of(context).size.width / 3.5, 50.0)),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  "End Time",
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("Batal"),
+                                content: SizedBox(
+                                  height: 200.0,
+                                  child: CupertinoDatePicker(
+                                    use24hFormat: true,
+                                    mode: CupertinoDatePickerMode.time,
+                                    onDateTimeChanged: (value) {
+                                      setState(() => _endTime = value);
+                                    },
+                                    initialDateTime: _endTime,
+                                  ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("OK"),
-                                )
-                              ],
-                            );
-                          });
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width / 3.5,
-                      height: 50.0,
-                      color: Colors.blue,
-                      child: const Center(
-                        child: Text(
-                          "End Time",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Batal"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              );
+                            });
+                      },
+                      child: const Text("End Time")),
                   const SizedBox(
                     width: 10.0,
                   ),

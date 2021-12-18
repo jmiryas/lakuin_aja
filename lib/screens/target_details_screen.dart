@@ -79,7 +79,7 @@ class TargetDetailsScreen extends StatelessWidget {
                                     trailing: currentGoal.complete
                                         ? const Icon(
                                             Icons.check_circle,
-                                            color: Colors.green,
+                                            color: Colors.teal,
                                           )
                                         : const Icon(
                                             Icons.check_circle_outline_rounded,

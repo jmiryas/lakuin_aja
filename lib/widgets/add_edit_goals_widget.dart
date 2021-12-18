@@ -72,7 +72,7 @@ class AddEditGoalsWidget extends StatelessWidget {
                             builder: (context) {
                               return AlertDialog(
                                 title: const Text(
-                                  "End Time",
+                                  "Start Time",
                                   textAlign: TextAlign.center,
                                 ),
                                 content: SizedBox(
@@ -129,8 +129,9 @@ class AddEditGoalsWidget extends StatelessWidget {
                 children: [
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          minimumSize: Size(
-                              MediaQuery.of(context).size.width / 3.5, 50.0)),
+                        minimumSize:
+                            Size(MediaQuery.of(context).size.width / 3.5, 50.0),
+                      ),
                       onPressed: () {
                         showDialog(
                             context: context,

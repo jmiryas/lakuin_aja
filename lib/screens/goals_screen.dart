@@ -53,7 +53,7 @@ class GoalsScreen extends StatelessWidget {
                             height: double.infinity,
                             child: Center(
                               child: CircleAvatar(
-                                backgroundColor: Colors.amber,
+                                backgroundColor: Colors.teal,
                                 radius: 8.0,
                               ),
                             ),

@@ -26,8 +26,18 @@ class MyApp extends StatelessWidget {
           create: (context) => GoogleSignInProvider(),
         ),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.teal),
+          floatingActionButtonTheme:
+              const FloatingActionButtonThemeData(backgroundColor: Colors.teal),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.teal),
+            ),
+          ),
+        ),
         title: kAppTitle,
         onGenerateRoute: AppRouter.onGenerateRoute,
         initialRoute: CustomAppRoute.homeScreen,

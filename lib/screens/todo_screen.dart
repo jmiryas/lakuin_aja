@@ -36,33 +36,71 @@ class TodoScreen extends StatelessWidget {
                     crossAxisCount: 2,
                     mainAxisSpacing: 20.0,
                     crossAxisSpacing: 20.0,
+                    mainAxisExtent: 200.0,
                   ),
                   children: snapshot.data!.docs.map((task) {
-                    return Card(
-                      color: Color(task["color"]),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              task["label"],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Divider(
+                    return Dismissible(
+                      background: Container(
+                        color: Colors.red.shade300,
+                        child: const Center(
+                          child: Text(
+                            "Hapus?",
+                            style: TextStyle(
                               color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Text("${task['todos'].length}",
+                          ),
+                        ),
+                      ),
+                      key: Key(task["id"]),
+                      onDismissed: (direction) async {
+                        // * Hapus task.
+
+                        FirebaseFirestore firestore =
+                            FirebaseFirestore.instance;
+                        CollectionReference tasksCollection =
+                            firestore.collection(kTasksCollection);
+
+                        await tasksCollection
+                            .doc(task.id)
+                            .delete()
+                            .whenComplete(
+                              () => ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Task berhasil dihapus!"),
+                                ),
+                              ),
+                            );
+                      },
+                      child: Card(
+                        color: Color(task["color"]),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                task["label"],
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                ))
-                          ],
+                                ),
+                              ),
+                              const Divider(
+                                color: Colors.white,
+                                thickness: 1.0,
+                              ),
+                              Text(
+                                "${task['todos'].length}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     );

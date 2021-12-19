@@ -113,6 +113,24 @@ class DrawerNavigationWidget extends StatelessWidget {
             title: Row(
               children: const [
                 Icon(
+                  Icons.yard,
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  "Todo",
+                )
+              ],
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, CustomAppRoute.todoScreen);
+            },
+          ),
+          ListTile(
+            title: Row(
+              children: const [
+                Icon(
                   Icons.info,
                 ),
                 SizedBox(

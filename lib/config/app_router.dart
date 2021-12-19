@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lakuin_aja/screens/add_todo_screen.dart';
 
+import '../screens/todo_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/goals_screen.dart';
 import '../screens/error_screen.dart';
@@ -31,6 +33,12 @@ class AppRouter {
               targetDocId: targetArgs["targetDocId"],
             ),
             CustomAppRoute.targetDetailsScreen);
+      case CustomAppRoute.todoScreen:
+        return CustomAppRoute.goToRoute(
+            const TodoScreen(), CustomAppRoute.todoScreen);
+      case CustomAppRoute.addTodoScreen:
+        return CustomAppRoute.goToRoute(
+            const AddTodoScreen(), CustomAppRoute.addTodoScreen);
       default:
         return CustomAppRoute.goToRoute(
             const ErrorScreen(), CustomAppRoute.errorScreen);

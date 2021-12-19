@@ -21,9 +21,68 @@ class TodoScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text("Todo"),
       ),
-      body: const Center(
-        child: Text("Todo"),
-      ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection(kTasksCollection)
+              .where("uid", isEqualTo: user!.uid)
+              .orderBy("dateTime", descending: true)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.size > 0) {
+                return GridView(
+                  padding: const EdgeInsets.all(20.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 20.0,
+                    crossAxisSpacing: 20.0,
+                  ),
+                  children: snapshot.data!.docs.map((task) {
+                    return Card(
+                      color: Color(task["color"]),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              task["label"],
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Divider(
+                              color: Colors.white,
+                            ),
+                            Text("${task['todos'].length}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ))
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                );
+              } else {
+                return const Center(
+                  child: Text("Task masih kosong"),
+                );
+              }
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text("Something went wrong!"),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigator.pushNamed(context, CustomAppRoute.addTodoScreen);
@@ -124,9 +183,10 @@ class TodoScreen extends StatelessWidget {
 
                           TaskModel task = TaskModel(
                             id: uuid.v4(),
-                            uid: user!.uid,
+                            uid: user.uid,
                             label: _taskController.text,
                             color: _selectedColor,
+                            dateTime: DateTime.now(),
                           );
 
                           FirebaseFirestore firestore =

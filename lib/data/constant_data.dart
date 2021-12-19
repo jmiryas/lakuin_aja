@@ -6,19 +6,19 @@ const kAppDrawerWallpaper = "images/wallpaper.png";
 
 const kGoalsCollection = "goals";
 const kTargetsCollection = "targets";
-const kTasksCollection = "task";
+const kTasksCollection = "tasks";
 
 // Task color
 
 final List<int> colorList = [
-  0xFF00b894,
-  0xFF00cec9,
-  0xFF0984e3,
-  0xFF6c5ce7,
-  0xFFb2bec3,
-  0xFFfdcb6e,
-  0xFFe17055,
-  0xFFd63031,
-  0xFFe84393,
-  0xFF2d3436,
+  0xFFf19066,
+  0xFFf5cd79,
+  0xFF546de5,
+  0xFFe15f41,
+  0xFFc44569,
+  0xFF574b90,
+  0xFFf78fb3,
+  0xFF3dc1d3,
+  0xFFe66767,
+  0xFF303952,
 ];

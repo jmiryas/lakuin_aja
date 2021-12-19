@@ -4,13 +4,15 @@ class TaskModel {
   final String label;
   final int color;
   final List<dynamic> todos;
+  final DateTime dateTime;
 
   TaskModel({
     required this.id,
     required this.uid,
     required this.label,
     required this.color,
-    this.todos = const [{}],
+    this.todos = const [],
+    required this.dateTime,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +22,7 @@ class TaskModel {
       "label": label,
       "color": color,
       "todos": todos,
+      "dateTime": dateTime,
     };
   }
 
@@ -30,6 +33,7 @@ class TaskModel {
       label: json["label"],
       color: json["color"],
       todos: json["todos"],
+      dateTime: json["dateTime"],
     );
   }
 }

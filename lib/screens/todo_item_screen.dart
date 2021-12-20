@@ -1,13 +1,11 @@
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/task_model.dart';
 import '../models/todo_model.dart';
 import '../data/constant_data.dart';
-import '../providers/todo_item_provider.dart';
 
 class TodoItemScreen extends StatelessWidget {
   final String taskId;
@@ -28,38 +26,6 @@ class TodoItemScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Task Item"),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final todoItemProvider =
-                  Provider.of<TodoItemProvider>(context, listen: false);
-
-              FirebaseFirestore firestore = FirebaseFirestore.instance;
-              CollectionReference tasksCollection =
-                  firestore.collection(kTasksCollection);
-
-              await tasksCollection.doc(taskId).update({
-                "todos": [
-                  ...task.todos,
-                  ...todoItemProvider.todoList
-                      .map((item) => item.toMap())
-                      .toList()
-                ],
-              }).whenComplete(
-                () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Target berhasil diupdate!"),
-                    ),
-                  );
-
-                  todoItemProvider.clearTodo();
-                },
-              );
-            },
-            icon: const Icon(Icons.check_sharp),
-          ),
-        ],
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
@@ -142,6 +108,8 @@ class TodoItemScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () async {
+                        // Add new todo item
+
                         if (_todoItemController.text.isEmpty) {
                           showDialog(
                             context: context,
@@ -156,24 +124,47 @@ class TodoItemScreen extends StatelessWidget {
                             },
                           );
                         } else {
-                          // const uuid = Uuid();
+                          final currentTasksCollection = await FirebaseFirestore
+                              .instance
+                              .collection(kTasksCollection)
+                              .where(FieldPath.documentId, isEqualTo: taskId)
+                              .get();
 
-                          // final todoItemProvider =
-                          //     Provider.of<TodoItemProvider>(context,
-                          //         listen: false);
+                          List<dynamic> currentTodos = currentTasksCollection
+                              .docs
+                              .map((taskItem) => taskItem["todos"])
+                              .toList();
 
-                          // todoItemProvider.addTodo(
-                          //   TodoModel(
-                          //     id: uuid.v4(),
-                          //     uid: user!.uid,
-                          //     label: _todoItemController.text,
-                          //     dateTime: DateTime.now(),
-                          //   ),
-                          // );
+                          const uuid = Uuid();
 
-                          // _todoItemController.clear();
+                          FirebaseFirestore firestore =
+                              FirebaseFirestore.instance;
+                          CollectionReference tasksCollection =
+                              firestore.collection(kTasksCollection);
 
-                          Navigator.pop(context);
+                          await tasksCollection.doc(taskId).update({
+                            "todos": [
+                              ...currentTodos[0],
+                              TodoModel(
+                                id: uuid.v4(),
+                                uid: user!.uid,
+                                label: _todoItemController.text,
+                                dateTime: DateTime.now(),
+                              ).toMap(),
+                            ],
+                          }).whenComplete(
+                            () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Target berhasil diupdate!"),
+                                ),
+                              );
+
+                              _todoItemController.clear();
+
+                              Navigator.pop(context);
+                            },
+                          );
                         }
                       },
                       child: const Text("Simpan"),

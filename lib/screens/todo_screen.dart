@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/task_model.dart';
 import '../data/constant_data.dart';
+import '../config/custom_app_route.dart';
 
 class TodoScreen extends StatelessWidget {
   const TodoScreen({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class TodoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Todo"),
+        title: const Text("Task"),
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
@@ -30,14 +31,8 @@ class TodoScreen extends StatelessWidget {
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data!.size > 0) {
-                return GridView(
+                return ListView(
                   padding: const EdgeInsets.all(20.0),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 20.0,
-                    crossAxisSpacing: 20.0,
-                    mainAxisExtent: 200.0,
-                  ),
                   children: snapshot.data!.docs.map((task) {
                     return Dismissible(
                       background: Container(
@@ -73,34 +68,36 @@ class TodoScreen extends StatelessWidget {
                             );
                       },
                       child: Card(
-                        color: Color(task["color"]),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                task["label"],
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Divider(
-                                color: Colors.white,
-                                thickness: 1.0,
-                              ),
-                              Text(
-                                "${task['todos'].length}",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
+                        child: ListTile(
+                          leading: SizedBox(
+                            height: 50.0,
+                            child: CircleAvatar(
+                              radius: 10.0,
+                              backgroundColor: Color(task["color"]),
+                            ),
                           ),
+                          title: Text(task["label"]),
+                          subtitle: Text("${task['todos'].length}"),
+                          trailing: const Icon(Icons.arrow_forward_ios),
+                          onTap: () {
+                            final currentTask = TaskModel.fromJson({
+                              "id": task["id"],
+                              "uid": task["uid"],
+                              "label": task["label"],
+                              "color": task["color"],
+                              "todos": task["todos"],
+                              "dateTime": task["dateTime"],
+                            });
+
+                            Navigator.pushNamed(
+                              context,
+                              CustomAppRoute.taskItemScreen,
+                              arguments: {
+                                "taskId": task.id,
+                                "task": currentTask,
+                              },
+                            );
+                          },
                         ),
                       ),
                     );
@@ -143,7 +140,7 @@ class TodoScreen extends StatelessWidget {
                             textCapitalization: TextCapitalization.sentences,
                             decoration: const InputDecoration(
                                 labelText: "Nama task",
-                                hintText: "Misal: Menulis artikel blog"),
+                                hintText: "Misal: Membuat Konten"),
                           ),
                           const SizedBox(
                             height: 35.0,

@@ -33,7 +33,7 @@ class TaskModel {
       label: json["label"],
       color: json["color"],
       todos: json["todos"],
-      dateTime: json["dateTime"],
+      dateTime: json["dateTime"].toDate(),
     );
   }
 }

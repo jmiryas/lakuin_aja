@@ -3,12 +3,14 @@ class TodoModel {
   final String uid;
   final String label;
   final bool complete;
+  final DateTime dateTime;
 
   TodoModel({
     required this.id,
     required this.uid,
     required this.label,
-    required this.complete,
+    this.complete = false,
+    required this.dateTime,
   });
 
   Map<String, dynamic> toMap() {
@@ -17,6 +19,7 @@ class TodoModel {
       "uid": uid,
       "label": label,
       "complete": complete,
+      "dateTime": dateTime,
     };
   }
 
@@ -26,6 +29,7 @@ class TodoModel {
       uid: json["uid"],
       label: json["label"],
       complete: json["complete"],
+      dateTime: json["dateTime"],
     );
   }
 }

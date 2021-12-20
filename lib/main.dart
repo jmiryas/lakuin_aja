@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lakuin_aja/providers/todo_item_provider.dart';
 import 'package:provider/provider.dart';
 import "package:firebase_core/firebase_core.dart";
 
@@ -25,6 +26,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => GoogleSignInProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return TodoItemProvider();
+          },
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

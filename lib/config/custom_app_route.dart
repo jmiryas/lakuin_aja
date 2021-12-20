@@ -10,6 +10,7 @@ class CustomAppRoute {
   static const String signInScreen = "/signIn";
   static const String targetScreen = "/target";
   static const String addTodoScreen = "/add-todo";
+  static const String taskItemScreen = "/task-item";
   static const String targetDetailsScreen = "/target-details";
 
   // * Go to route:

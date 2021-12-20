@@ -61,34 +61,55 @@ class TodoItemScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<TodoItemProvider>(
-        builder: (context, todoItemProvider, child) {
-          return todoItemProvider.todoList.isEmpty
-              ? const Center(
-                  child: Text("Todo item masih kosong!"),
-                )
-              : ListView(
-                  padding: const EdgeInsets.all(20.0),
-                  children: todoItemProvider.todoList.map(
-                    (todo) {
-                      return Card(
-                        child: ListTile(
-                          title: Text(todo.label),
-                          trailing: todo.complete
-                              ? const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.teal,
-                                )
-                              : const Icon(
-                                  Icons.check_circle_outline_rounded,
-                                ),
-                        ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection(kTasksCollection)
+              .where(FieldPath.documentId, isEqualTo: taskId)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.size > 0) {
+                return ListView(padding: const EdgeInsets.all(20.0), children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: snapshot.data!.docs.map((taskItem) {
+                      return Column(
+                        children: [
+                          ...taskItem["todos"].map((item) {
+                            return Card(
+                              child: ListTile(
+                                title: Text(item["label"]),
+                                trailing: item["complete"]
+                                    ? const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.teal,
+                                      )
+                                    : const Icon(
+                                        Icons.check_circle_outline_rounded,
+                                      ),
+                              ),
+                            );
+                          }).toList()
+                        ],
                       );
-                    },
-                  ).toList(),
+                    }).toList(),
+                  )
+                ]);
+              } else {
+                return const Center(
+                  child: Text("Task item masih kosong."),
                 );
-        },
-      ),
+              }
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text("Something went wrong!"),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
@@ -135,22 +156,22 @@ class TodoItemScreen extends StatelessWidget {
                             },
                           );
                         } else {
-                          const uuid = Uuid();
+                          // const uuid = Uuid();
 
-                          final todoItemProvider =
-                              Provider.of<TodoItemProvider>(context,
-                                  listen: false);
+                          // final todoItemProvider =
+                          //     Provider.of<TodoItemProvider>(context,
+                          //         listen: false);
 
-                          todoItemProvider.addTodo(
-                            TodoModel(
-                              id: uuid.v4(),
-                              uid: user!.uid,
-                              label: _todoItemController.text,
-                              dateTime: DateTime.now(),
-                            ),
-                          );
+                          // todoItemProvider.addTodo(
+                          //   TodoModel(
+                          //     id: uuid.v4(),
+                          //     uid: user!.uid,
+                          //     label: _todoItemController.text,
+                          //     dateTime: DateTime.now(),
+                          //   ),
+                          // );
 
-                          _todoItemController.clear();
+                          // _todoItemController.clear();
 
                           Navigator.pop(context);
                         }

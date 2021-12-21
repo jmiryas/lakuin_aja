@@ -39,91 +39,105 @@ class TodoItemScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: snapshot.data!.docs.map((taskItem) {
-                      return Column(
-                        children: [
-                          Card(
-                            child: ListTile(
-                              title: Text(
-                                task.label,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              trailing: CircleAvatar(
-                                radius: 10.0,
-                                backgroundColor: Color(task.color),
-                              ),
-                            ),
-                          ),
-                          ...taskItem["todos"].map((item) {
-                            return Card(
-                              child: ListTile(
-                                title: Text(item["label"]),
-                                trailing: item["complete"]
-                                    ? const Icon(
-                                        Icons.check_circle,
-                                        color: Colors.teal,
-                                      )
-                                    : const Icon(
-                                        Icons.check_circle_outline_rounded,
+                      return taskItem["todos"].length > 0
+                          ? Column(
+                              children: [
+                                Card(
+                                  child: ListTile(
+                                    title: Text(
+                                      task.label,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                onTap: () async {
-                                  // Update task item: complete or incomplete
+                                    ),
+                                    trailing: CircleAvatar(
+                                      radius: 10.0,
+                                      backgroundColor: Color(task.color),
+                                    ),
+                                  ),
+                                ),
+                                ...taskItem["todos"].map((item) {
+                                  return Card(
+                                    child: ListTile(
+                                      title: Text(item["label"]),
+                                      trailing: item["complete"]
+                                          ? const Icon(
+                                              Icons.check_circle,
+                                              color: Colors.teal,
+                                            )
+                                          : const Icon(
+                                              Icons
+                                                  .check_circle_outline_rounded,
+                                            ),
+                                      onTap: () async {
+                                        // Update task item: complete or incomplete
 
-                                  List<dynamic> taskList = [];
+                                        List<dynamic> taskList = [];
 
-                                  final currentTasksCollection =
-                                      await FirebaseFirestore.instance
-                                          .collection(kTasksCollection)
-                                          .where(FieldPath.documentId,
-                                              isEqualTo: taskId)
-                                          .get();
+                                        final currentTasksCollection =
+                                            await FirebaseFirestore.instance
+                                                .collection(kTasksCollection)
+                                                .where(FieldPath.documentId,
+                                                    isEqualTo: taskId)
+                                                .get();
 
-                                  List<dynamic> currentTodos =
-                                      currentTasksCollection.docs
-                                          .map((taskItem) => taskItem["todos"])
-                                          .toList();
+                                        List<dynamic> currentTodos =
+                                            currentTasksCollection.docs
+                                                .map((taskItem) =>
+                                                    taskItem["todos"])
+                                                .toList();
 
-                                  currentTodos[0].map((itemTask) {
-                                    if (itemTask["id"] == item["id"]) {
-                                      taskList.add(TodoModel.fromJson({
-                                        "id": itemTask["id"],
-                                        "uid": itemTask["uid"],
-                                        "label": itemTask["label"],
-                                        "complete": !itemTask["complete"],
-                                        "dateTime": itemTask["dateTime"],
-                                      }).toMap());
-                                    } else {
-                                      taskList.add(itemTask);
-                                    }
-                                  }).toList();
+                                        currentTodos[0].map((itemTask) {
+                                          if (itemTask["id"] == item["id"]) {
+                                            taskList.add(TodoModel.fromJson({
+                                              "id": itemTask["id"],
+                                              "uid": itemTask["uid"],
+                                              "label": itemTask["label"],
+                                              "complete": !itemTask["complete"],
+                                              "dateTime": itemTask["dateTime"],
+                                            }).toMap());
+                                          } else {
+                                            taskList.add(itemTask);
+                                          }
+                                        }).toList();
 
-                                  FirebaseFirestore firestore =
-                                      FirebaseFirestore.instance;
-                                  CollectionReference tasksCollection =
-                                      firestore.collection(kTasksCollection);
+                                        FirebaseFirestore firestore =
+                                            FirebaseFirestore.instance;
+                                        CollectionReference tasksCollection =
+                                            firestore
+                                                .collection(kTasksCollection);
 
-                                  await tasksCollection.doc(taskId).update({
-                                    "todos": [
-                                      ...taskList,
-                                    ],
-                                  }).whenComplete(
-                                    () {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                              "Task item berhasil diupdate!"),
-                                        ),
-                                      );
-                                    },
+                                        await tasksCollection
+                                            .doc(taskId)
+                                            .update({
+                                          "todos": [
+                                            ...taskList,
+                                          ],
+                                        }).whenComplete(
+                                          () {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    "Task item berhasil diupdate!"),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
                                   );
-                                },
+                                }).toList()
+                              ],
+                            )
+                          : SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height - 150.0,
+                              width: MediaQuery.of(context).size.width,
+                              child: const Center(
+                                child: Text("Task item masih kosong!"),
                               ),
                             );
-                          }).toList()
-                        ],
-                      );
                     }).toList(),
                   )
                 ]);

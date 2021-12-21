@@ -78,7 +78,9 @@ class TodoScreen extends StatelessWidget {
                           ),
                           title: Text(task["label"]),
                           subtitle: Text("${task['todos'].length}"),
-                          trailing: const Icon(Icons.arrow_forward_ios),
+                          trailing: const Icon(
+                            Icons.keyboard_arrow_right_rounded,
+                          ),
                           onTap: () {
                             final currentTask = TaskModel.fromJson({
                               "id": task["id"],

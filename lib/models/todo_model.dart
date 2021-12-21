@@ -29,7 +29,7 @@ class TodoModel {
       uid: json["uid"],
       label: json["label"],
       complete: json["complete"],
-      dateTime: json["dateTime"],
+      dateTime: json["dateTime"].toDate(),
     );
   }
 }

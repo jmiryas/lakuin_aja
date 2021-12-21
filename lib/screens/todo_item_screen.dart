@@ -53,6 +53,56 @@ class TodoItemScreen extends StatelessWidget {
                                     : const Icon(
                                         Icons.check_circle_outline_rounded,
                                       ),
+                                onTap: () async {
+                                  List<dynamic> taskList = [];
+
+                                  final currentTasksCollection =
+                                      await FirebaseFirestore.instance
+                                          .collection(kTasksCollection)
+                                          .where(FieldPath.documentId,
+                                              isEqualTo: taskId)
+                                          .get();
+
+                                  List<dynamic> currentTodos =
+                                      currentTasksCollection.docs
+                                          .map((taskItem) => taskItem["todos"])
+                                          .toList();
+
+                                  currentTodos[0].map((itemTask) {
+                                    if (itemTask["id"] == item["id"]) {
+                                      taskList.add(TodoModel.fromJson({
+                                        "id": itemTask["id"],
+                                        "uid": itemTask["uid"],
+                                        "label": itemTask["label"],
+                                        "complete": !itemTask["complete"],
+                                        "dateTime": itemTask["dateTime"],
+                                      }).toMap());
+                                    } else {
+                                      taskList.add(itemTask);
+                                    }
+                                  }).toList();
+
+                                  FirebaseFirestore firestore =
+                                      FirebaseFirestore.instance;
+                                  CollectionReference tasksCollection =
+                                      firestore.collection(kTasksCollection);
+
+                                  await tasksCollection.doc(taskId).update({
+                                    "todos": [
+                                      ...taskList,
+                                    ],
+                                  }).whenComplete(
+                                    () {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              "Task item berhasil diupdate!"),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
                               ),
                             );
                           }).toList()
@@ -156,13 +206,13 @@ class TodoItemScreen extends StatelessWidget {
                             () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Target berhasil diupdate!"),
+                                  content: Text("Task item berhasil ditambah!"),
                                 ),
                               );
 
-                              _todoItemController.clear();
-
                               Navigator.pop(context);
+
+                              _todoItemController.clear();
                             },
                           );
                         }

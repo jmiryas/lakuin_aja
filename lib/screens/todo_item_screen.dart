@@ -41,6 +41,20 @@ class TodoItemScreen extends StatelessWidget {
                     children: snapshot.data!.docs.map((taskItem) {
                       return Column(
                         children: [
+                          Card(
+                            child: ListTile(
+                              title: Text(
+                                task.label,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              trailing: CircleAvatar(
+                                radius: 10.0,
+                                backgroundColor: Color(task.color),
+                              ),
+                            ),
+                          ),
                           ...taskItem["todos"].map((item) {
                             return Card(
                               child: ListTile(
@@ -54,6 +68,8 @@ class TodoItemScreen extends StatelessWidget {
                                         Icons.check_circle_outline_rounded,
                                       ),
                                 onTap: () async {
+                                  // Update task item: complete or incomplete
+
                                   List<dynamic> taskList = [];
 
                                   final currentTasksCollection =

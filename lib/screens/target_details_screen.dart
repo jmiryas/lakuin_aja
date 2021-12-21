@@ -39,21 +39,24 @@ class TargetDetailsScreen extends StatelessWidget {
                         (targetItem) {
                           return Column(
                             children: [
-                              ListTile(
-                                title: Text(
-                                  formattedDate.format(
-                                    targetItem["dateTime"].toDate(),
-                                  ),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                trailing: SizedBox(
-                                  height: 50.0,
-                                  child: CircleAvatar(
-                                    radius: 10.0,
-                                    backgroundColor: TargetModel.getTargetColor(
+                              Card(
+                                child: ListTile(
+                                  title: Text(
+                                    formattedDate.format(
                                       targetItem["dateTime"].toDate(),
+                                    ),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  trailing: SizedBox(
+                                    height: 50.0,
+                                    child: CircleAvatar(
+                                      radius: 10.0,
+                                      backgroundColor:
+                                          TargetModel.getTargetColor(
+                                        targetItem["dateTime"].toDate(),
+                                      ),
                                     ),
                                   ),
                                 ),
